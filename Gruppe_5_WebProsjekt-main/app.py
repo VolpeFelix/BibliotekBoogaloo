@@ -22,6 +22,7 @@ class User(UserMixin, db.Model):
     email = db.Column('Email', db.String(100), unique=True, nullable=False)
     password_hash = db.Column('password_hash', db.String(128), nullable=False)
     role = db.Column('Role', db.String(10), default='user')
+    ratings = relationship('BokRating', back_populates='bruker')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -259,7 +260,7 @@ def innlevering():
 @app.route('/rate-book/<int:isbn>', methods=['POST'])
 @login_required
 def rate_book(isbn):
-    new_rating = request.form.get('rating')
+    new_rating = int(request.form.get('rating'))
     if new_rating and 1 <= int(new_rating) <= 5:
         existing_rating = BokRating.query.filter_by(bok_isbn=isbn, student_id=current_user.id).first()
         if existing_rating:
