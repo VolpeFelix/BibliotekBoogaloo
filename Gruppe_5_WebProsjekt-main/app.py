@@ -261,7 +261,7 @@ def innlevering():
 @login_required
 def rate_book(isbn):
     new_rating = int(request.form.get('rating'))
-    if new_rating and 1 <= int(new_rating) <= 5:
+    if 1 <= new_rating <= 5:
         existing_rating = BokRating.query.filter_by(bok_isbn=isbn, student_id=current_user.id).first()
         if existing_rating:
             existing_rating.rating = new_rating
