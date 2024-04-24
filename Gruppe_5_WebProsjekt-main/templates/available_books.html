@@ -81,6 +81,12 @@
             var form = document.getElementById('rating-form-' + isbn);
             var hiddenInput = document.getElementById('rating-input-' + isbn);
             hiddenInput.value = value;
+            var stars = document.querySelectorAll('#rating-' + isbn + ' span');
+            stars.forEach((star, index) => {
+                star.style.color = index < value ? 'gold' : 'grey';
+                star.classList.remove('active');
+                if (index < value) star.classList.add('active');
+            });
             form.submit();
         }
     </script>
