@@ -171,8 +171,9 @@ class Bøker(db.Model):
     Tittel = db.Column(db.String(100), nullable=False)
     Forfatter = db.Column(db.String(100), nullable=False)
     Sjanger = db.Column(db.String(100), nullable=False)
-
     lånte_bøker = relationship("LånteBøker", back_populates="bok")
+    ratings = relationship('BokRating', back_populates='bok')  # Legg til denne linjen her
+
 
 
 class LånteBøker(db.Model):
