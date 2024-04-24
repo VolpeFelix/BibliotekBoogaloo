@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from sqlalchemy.orm import relationship
-import datetime
+import datetime from datetime, timedelta
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/gruppe_5_bibliotek'
@@ -95,6 +95,16 @@ def login():
 @app.route('/profile')
 @login_required
 def profile():
+    today = datetime.now().date()
+    overdue_loans = LånteBøker.query.filter(
+        LånteBøker.StudentID == current_user.id,
+        LånteBøker.Levert == False,
+        LånteBøker.LånDato <= (today - timedelta(days=30))
+    ).all()
+
+    if overdue_loans:
+        for loan in overdue_loans:
+            flash(f'Bok med ISBN {loan.ISBN} må returneres umiddelbart!', 'warning')
     greeting = get_time_of_day() 
     return render_template('profile.html', time_of_day=greeting, fornavn=current_user.fornavn, etternavn=current_user.etternavn)
 
