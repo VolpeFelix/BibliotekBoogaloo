@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tilgjengelige Tidsskrifter</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            width: 90%; 
+            max-width: 600px; 
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            margin-top: 20px; 
+        }
+        form {
+            margin: 20px 0;
+        }
+        button, a.button {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+        button:hover, a.button:hover {
+            background-color: #0056b3;
+        }
+        .book-item {
+            margin: 10px 0;
+        }
+        .book-label {
+            display: inline-block;
+            margin-left: 10px;
+        }
+        p {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tilgjengelige Tidsskrifter</h1>
+        <form action="{{ url_for('borrow_magazine') }}" method="post">
+            {% for magazine in magazines %}
+            <div class="magazine-item">
+                <input type="checkbox" name="tidsskriftid" value="{{ magazine.TidsskriftID }}" id="mag{{ magazine.TidsskriftID }}">
+                <label for="mag{{ magazine.TidsskriftID }}" class="magazine-label">{{ magazine.Tittel }} - Utgiver: {{ magazine.Utgiver }} (Kategori: {{ magazine.Kategori }})</label>
+            </div>
+            {% endfor %}
+            <button type="submit">Lån Valgte Tidsskrifter</button>
+        </form>
+        <a href="{{ url_for('profile') }}" class="button">← Tilbake til Profil</a>
+    </div>
+</body>
+</html>
+
+
+
+

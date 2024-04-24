@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrering</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            width: 90%;
+            max-width: 320px;
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            margin-top: 20px; /* Just to ensure it doesn't touch the top of the viewport */
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="post">
+            <label for="fornavn">Fornavn:</label>
+            <input type="text" id="fornavn" name="fornavn" required>
+            <label for="etternavn">Etternavn:</label>
+            <input type="text" id="etternavn" name="etternavn" required>
+            <label for="email">E-post:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Passord:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Registrer</button>
+        </form>
+    </div>
+</body>
+</html>
+
+

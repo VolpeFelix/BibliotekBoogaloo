@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oversikt og innlevering av bøker og tidsskrifter</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 20px; 
+            background: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+        }
+        h1, h2, h3 {
+            margin: 20px 0;
+        }
+        button, a.button {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover, a.button:hover {
+            background-color: #0056b3;
+        }
+        label {
+            margin-left: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Innlevering av bøker og tidsskrifter</h1>
+        <p>Velg hvilken bok eller tidsskrift du ønsker å levere inn:</p>
+        <form action="{{ url_for('innlevering') }}" method="POST">
+            {% if loans_bøker %}
+                <h3>Bøker lånt:</h3>
+                {% for loan in loans_bøker %}
+                    <input type="checkbox" id="bok_{{ loan.LånID }}" name="item_id" value="bok_{{ loan.LånID }}">
+                    <label for="bok_{{ loan.LånID }}">{{ loan.bok.Tittel }}</label><br>
+                {% endfor %}
+            {% endif %}
+            {% if loans_tidsskrifter %}
+                <h3>Tidsskrifter lånt:</h3>
+                {% for loan in loans_tidsskrifter %}
+                    <input type="checkbox" id="tidsskrift_{{ loan.T_LånID }}" name="item_id" value="tidsskrift_{{ loan.T_LånID }}">
+                    <label for="tidsskrift_{{ loan.T_LånID }}">{{ loan.tidsskrift.Tittel }}</label><br>
+                {% endfor %}
+            {% endif %}
+            <button type="submit">Lever inn valgte bøker og tidsskrifter</button>
+        </form>
+        <br>
+        <h2>Siste 5 innleverte bøker og tidsskrifter:</h2>
+        <table>
+            <tr>
+                <th>Tittel</th>
+                <th>Innleverings dato</th>
+            </tr>
+            {% for item in last_delivered_items %}
+            <tr>
+                <td>{{ item.bok.Tittel if item.bok else item.tidsskrift.Tittel }}</td>
+                <td>{{ item.ReturDato.strftime('%Y-%m-%d') }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <a href="{{ url_for('profile') }}" class="button">Tilbake til profilsiden</a>
+    </div>
+</body>
+</html>
+

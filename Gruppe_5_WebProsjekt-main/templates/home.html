@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bibliotekssystem</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            width: 90%; 
+            max-width: 600px; 
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        a.button {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px 2px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        a.button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Velkommen til Bibliotekssystemet!</h1>
+        <a href="{{ url_for('register') }}" class="button">Registrer deg</a>
+        <a href="{{ url_for('login') }}" class="button">Logg inn</a>
+    </div>
+</body>
+</html>
