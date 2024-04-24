@@ -26,6 +26,14 @@
         h1 {
             margin-bottom: 20px;
         }
+        .alert {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
         a.button {
             display: inline-block;
             text-decoration: none;
@@ -45,6 +53,13 @@
 </head>
 <body>
     <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <h1>{{ time_of_day }}, {{ fornavn }} {{ etternavn }}!</h1>
         <a href="{{ url_for('logout') }}" class="button">Logg ut</a>
         <a href="{{ url_for('available_books') }}" class="button">Se tilgjengelige bøker til låns</a>
