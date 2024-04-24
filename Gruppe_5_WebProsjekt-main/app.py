@@ -29,6 +29,14 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+class BokRating(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    bok_isbn = db.Column(db.BigInteger, db.ForeignKey('bøker.ISBN'), nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey('studenter.StudentID'), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+
+    bruker = relationship('User', back_populates='ratings')
+    bok = relationship('Bøker', back_populates='ratings')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -246,6 +254,27 @@ def innlevering():
         LånteTidsskrifter.query.filter_by(StudentID=current_user.id, Levert=True).order_by(
             LånteTidsskrifter.ReturDato.desc()).limit(5).all()
     return render_template('innlevering.html', loans_bøker=loans_bøker, loans_tidsskrifter=loans_tidsskrifter, last_delivered_items=last_delivered_items)
+
+@app.route('/rate-book/<int:isbn>', methods=['POST'])
+@login_required
+def rate_book(isbn):
+    new_rating = request.form.get('rating')
+    if new_rating and 1 <= int(new_rating) <= 5:
+        existing_rating = BokRating.query.filter_by(bok_isbn=isbn, student_id=current_user.id).first()
+        if existing_rating:
+            existing_rating.rating = new_rating
+        else:
+            new_book_rating = BokRating(bok_isbn=isbn, student_id=current_user.id, rating=new_rating)
+            db.session.add(new_book_rating)
+        db.session.commit()
+        flash('Din vurdering er registrert.', 'success')
+    else:
+        flash('Vurdering må være et tall mellom 1 og 5.', 'error')
+    return redirect(url_for('available_books'))
+
+
+Bøker.ratings = relationship('BokRating', back_populates='bok')
+User.ratings = relationship('BokRating', back_populates='bruker')
 
 
 if __name__ == "__main__":
