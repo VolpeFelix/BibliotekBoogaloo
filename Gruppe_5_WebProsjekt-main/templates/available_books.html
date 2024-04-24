@@ -52,14 +52,25 @@
             color: #666;
             font-size: 0.9em;
         }
-        .rating-form {
-            margin-top: 5px;
-        }
-        select {
-            margin-right: 10px;
+        .rating {
             cursor: pointer;
+            color: gold;
+        }
+        .rating span:hover,
+        .rating span:hover ~ span {
+            color: grey;
         }
     </style>
+    <script>
+        function setRating(value, isbn) {
+            var hiddenInput = document.getElementById('rating-input-' + isbn);
+            hiddenInput.value = value;
+            var stars = document.querySelectorAll('#rating-' + isbn + ' span');
+            stars.forEach((star, index) => {
+                star.style.color = index < value ? 'gold' : 'grey';
+            });
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -69,17 +80,15 @@
             <div class="book-item">
                 <input type="radio" name="isbn" value="{{ book.ISBN }}" id="book{{ book.ISBN }}">
                 <label for="book{{ book.ISBN }}" class="book-label">{{ book.Tittel }} av {{ book.Forfatter }} ({{ book.Sjanger }})</label>
-                <form action="{{ url_for('rate_book', isbn=book.ISBN) }}" method="post" class="rating-form">
-                    <select name="rating">
-                        <option value="1">⭐</option>
-                        <option value="2">⭐⭐</option>
-                        <option value="3">⭐⭐⭐</option>
-                        <option value="4">⭐⭐⭐⭐</option>
-                        <option value="5">⭐⭐⭐⭐⭐</option>
-                    </select>
-                    <button type="submit">Rate</button>
-                </form>
-                <p>Average Rating: {{ book.ratings|length > 0 ? (book.ratings|sum(attribute='rating') / book.ratings|length)|round(2) : 'Not rated yet' }}</p>
+                <div id="rating-{{ book.ISBN }}" class="rating">
+                    <span onclick="setRating(1, '{{ book.ISBN }}')">&#9733;</span>
+                    <span onclick="setRating(2, '{{ book.ISBN }}')">&#9733;</span>
+                    <span onclick="setRating(3, '{{ book.ISBN }}')">&#9733;</span>
+                    <span onclick="setRating(4, '{{ book.ISBN }}')">&#9733;</span>
+                    <span onclick="setRating(5, '{{ book.ISBN }}')">&#9733;</span>
+                    <input type="hidden" id="rating-input-{{ book.ISBN }}" name="rating" value="">
+                </div>
+                <button type="submit">Rate</button>
             </div>
             {% endfor %}
             <button type="submit">Lån Valgt Bok</button>
